@@ -1,7 +1,7 @@
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const Employee = require("./lib/Employee");
+// const Employee = require("./lib/Employee");
 
 const inquirer = require("inquirer");
 const path = require("path");
@@ -20,7 +20,7 @@ const employeeQues = [
         message: 'What is their name?'
     },
     {
-        name: 'identification',
+        name: 'id',
         type: 'input',
         message: 'What is their id?'
     },
@@ -33,7 +33,7 @@ const employeeQues = [
 
 const engineerQues = [
     {
-        name: 'Github',
+        name: 'github',
         type: 'input',
         message: 'What is their github?'
     }
@@ -47,7 +47,7 @@ const internQues = [
 ];
 const managerQues = [
     {
-        name: 'OfficeNumber',
+        name: 'officeNumber',
         type: 'input',
         message: 'What is their Office Number?'
     }
@@ -60,30 +60,31 @@ async function init() {
                 name: 'choice',
                 type: 'list',
                 message: 'What position are you currently logging?',
-                choices: ['Manager, Engineer, Intern, quit']
+                choices: ['Manager', 'Engineer', 'Intern', 'quit']
             },
 
         ]);
         switch (answers.choice) {
             case 'Manager':
-
-
-
+                const managerAns = await inquirer.prompt([...managerQues, ...employeeQues])
+                const newManager = new Manager(managerAns.officeNumber, managerAns.name, managerAns.id, managerAns.email);
+                employees.push(newManager);
                 init();
                 break;
             case 'Engineer':
-
-
-
+                const engineerAns = await inquirer.prompt([...engineerQues, ...employeeQues])
+                const newEngineer = new Engineer(engineerAns.github, engineerAns.name, engineerAns.id, engineerAns.email);
+                employees.push(newEngineer);
                 init();
                 break;
             case 'Intern':
-
-
-
+                const internAns = await inquirer.prompt([...internQues, ...employeeQues])
+                const newIntern = new Intern(internAns.school, internAns.name, internAns.id, internAns.email);
+                employees.push(newIntern);
                 init();
                 break;
             default:
+                console.log(employees);
                 console.log("Bye");
         }
     } catch (err) {
