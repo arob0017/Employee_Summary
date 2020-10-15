@@ -1,6 +1,8 @@
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+const Employee = require("./lib/Employee");
+
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
@@ -10,7 +12,87 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const employees = [];
+const employeeQues = [
+    {
+        name: 'name',
+        type: 'input',
+        message: 'What is their name?'
+    },
+    {
+        name: 'identification',
+        type: 'input',
+        message: 'What is their id?'
+    },
+    {
+        name: 'email',
+        type: 'input',
+        message: 'What is their email?'
+    },
+];
 
+const engineerQues = [
+    {
+        name: 'Github',
+        type: 'input',
+        message: 'What is their github?'
+    }
+];
+const internQues = [
+    {
+        name: 'school',
+        type: 'input',
+        message: 'What is their School?'
+    }
+];
+const managerQues = [
+    {
+        name: 'OfficeNumber',
+        type: 'input',
+        message: 'What is their Office Number?'
+    }
+];
+
+async function init() {
+    try {
+        const answers = await inquirer.prompt([
+            {
+                name: 'choice',
+                type: 'list',
+                message: 'What position are you currently logging?',
+                choices: ['Manager, Engineer, Intern, quit']
+            },
+
+        ]);
+        switch (answers.choice) {
+            case 'Manager':
+
+
+
+                init();
+                break;
+            case 'Engineer':
+
+
+
+                init();
+                break;
+            case 'Intern':
+
+
+
+                init();
+                break;
+            default:
+                console.log("Bye");
+        }
+    } catch (err) {
+        console.log(err);
+        init();
+    }
+
+}
+init();
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
