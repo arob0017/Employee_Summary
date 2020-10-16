@@ -11,7 +11,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-
+let teamMembers = "";
 const employees = [];
 const employeeQues = [
     {
@@ -86,14 +86,48 @@ async function init() {
             default:
                 console.log(employees);
                 console.log("Bye");
+                buildHtmlPage();
         }
+
     } catch (err) {
         console.log(err);
         init();
     }
 
+
+    function buildHtmlPage() {
+        let newFile = fs.readFileSync("./templates/main.html");
+        fs.writeFileSync('output.html', newFile, function (err) {
+            if (err) throw err;
+        })
+        console.log("Your base html has been created!");
+
+        for (member of employees) {
+            if (member.getRole() == "Manager") {
+                htmlCard("manager", member.getName(), member.getId(), member.getEmail(), "Office Number: " + member.getOfficeNumber());
+            } else if (member.getRole() == "Engineer") {
+                htmlCard("engineer", member.getName(), member.getId(), member.getEmail(), "GitHub: " + member.getGithub());
+            } else if (member.getRole() == "Intern") {
+                htmlCard("intern", member.getName(), member.getId(), member.getEmail(), "School: " + member.getSchool());
+            };
+        };
+
+    };
+    function htmlCard(memberType, name, id, email, officeNumber, gitHub, school) {
+        let data = fs.readFileSync(`./templates/${memberType}.html`, 'utf8')
+        data = data.replace(/{{ name }}/g, name);
+        data = data.replace(/{{ role }}/g, getRole());
+        data = data.replace(/{{ id }}/g, `ID: ${id}`);
+        data = data.replace(/{{ email }}/g, `Email: <a href="mailto:${email}">${email}</a>`);
+        data = data.replace(/{{ officeNumber }}/g, `Office Number: ${officeNumber}`);
+        data = data.replace(/{{ school }}/g, `School: ${school}`)
+        data = data.replace(/{{ github }}/g, `GitHub: ${gitHub}`)
+        fs.appendFileSync("./output/teamPage.html", data, err => { if (err) throw err; })
+        console.log("Card appended");
+    }
 }
 init();
+
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
